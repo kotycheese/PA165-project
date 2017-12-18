@@ -32,7 +32,7 @@
                 <td><c:out value="${trip.price}"/></td>
                 <td><c:out value="${trip.excursions.size()}"/></td>
                 <td>
-                    <my:a href="/browsing/view/${trip.id}" class="btn btn-primary"><f:message key="buy"/></my:a>
+                    <my:a href="/browsing/create/${trip.id}" class="btn btn-primary"><f:message key="buy"/></my:a>
                 </td>
             </tr>
         </c:forEach>

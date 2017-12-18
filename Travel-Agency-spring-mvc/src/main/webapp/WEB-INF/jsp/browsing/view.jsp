@@ -37,6 +37,9 @@
             </tbody>
         </table>
 
+    <div class="row">
+        <h2><f:message key="excursions"/></h2>
+    </div>
     <table class="table">
             <thead>
             <tr>
@@ -56,7 +59,7 @@
                     <td><c:out value="${excursion.price}"/></td>
                     <td><c:if test="${reservation.excursions.contains(excursion)}">
                         <f:message key="yes"/>
-                    <c:if/></td>
+                    </c:if></td>
                     <td>
                         <my:a href="/browsing/add/${reservation.id}/${excursion.id}" class="btn btn-primary"><f:message key="add"/></my:a>
                     </td>
