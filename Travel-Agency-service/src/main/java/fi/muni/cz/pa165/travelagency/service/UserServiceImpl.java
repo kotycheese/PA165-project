@@ -94,10 +94,10 @@ public class UserServiceImpl implements UserService {
                 if (reservation.getPaymentState() != PaymentStateType.Paid) {
                     continue;
                 }
-                totalSum = totalSum.add(reservation.getReservedTrip().getPrice());
+                totalSum = totalSum.add(reservation.getTrip().getPrice());
 
-                if (reservation.getReservedExcursions() != null) {
-                    for (Excursion excursion: reservation.getReservedExcursions()) {
+                if (reservation.getExcursions() != null) {
+                    for (Excursion excursion: reservation.getExcursions()) {
                         totalSum = totalSum.add(excursion.getPrice());
                     }
                 }
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isAdmin(User user) {
         try {
-            return userDao.findById(user.getId()).isAdmin();
+            return userDao.findById(user.getId()).getIsAdmin();
         } catch (NullPointerException npe){
             throw npe;
         } catch (Exception e){
