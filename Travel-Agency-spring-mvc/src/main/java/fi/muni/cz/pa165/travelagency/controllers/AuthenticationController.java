@@ -1,6 +1,7 @@
 package fi.muni.cz.pa165.travelagency.controllers;
 
 
+
 import fi.muni.cz.pa165.travelagency.facade.UserFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * ss
@@ -42,8 +44,8 @@ public class AuthenticationController {
         return "auth/login";
     }
 
-
-    /*@RequestMapping(value = "/login", method = RequestMethod.POST)
+/*
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String authenticate(
             @RequestParam String email,
             @RequestParam String password,
@@ -56,21 +58,20 @@ public class AuthenticationController {
         userDto.setPasswordHash(password);
 
 
-        //if (!userFacade.authenticate(userDto)) {
-        //    redirectAttributes.addFlashAttribute("alert_danger", "You entered wrong username or password");
-        //    return "redirect:/auth/auth";
-        //}
+        if (!userFacade.authenticate(userDto)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "You entered wrong username or password");
+            return "redirect:/auth/auth";
+        }
 
-        //HttpSession session = req.getSession(true);
-        ////TODO: not safe, probably alright for demo purposes -> use some auth token instead
-        //session.setAttribute("authenticatedAs", authenticatedUser.getId());
-//
-        ////redirectAttributes.addFlashAttribute("alert_info", "You have been logged in.");
-        //if(authenticatedUser.isAdmin()) {
-        //    return "redirect:/admin/machine";
-        //}
-//
-        ////REGULAR USER
-        return "redirect:/machine";
-    }*/
+        HttpSession session = req.getSession(true);
+        //TODO: not safe, probably alright for demo purposes -> use some auth token instead
+        session.setAttribute("authenticatedAs", userDto.getId());
+
+        redirectAttributes.addFlashAttribute("alert_info", "You have been logged in.");
+        /*if() {
+            return "redirect:/admin/machine";
+        }*/
+
+        //return "redirect:/machine";
+    //}
 }

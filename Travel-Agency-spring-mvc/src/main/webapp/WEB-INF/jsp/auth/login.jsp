@@ -8,13 +8,14 @@
 <my:pagetemplate>
 <jsp:attribute name="body">
 
-    <!--<div class="jumbotron">
+    <div class="jumbotron">
         <form method="POST" action="/pa165/auth/login">
             Email: <input type="text" name="email"/><br/>
             Password: <input type="password" name="password"/><br/>
             <input type="submit"/>
         </form>
-    </div>-->
+    </div>
+    
 
 </jsp:attribute>
 </my:pagetemplate>
