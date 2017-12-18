@@ -52,12 +52,12 @@ public class ReservationController {
     static final String LISTALL = "reservation/list";
     
     /**
-     * asd
-     * @param model asdas
-     * @param sorted asdads
-     * @param request asdad
-     * @param redirectAttributes asdsa
-     * @return  asdads
+     * List all reservations as default, sorted by date or notpaid 
+     * @param model data to show
+     * @param sorted atribute to return different lists
+     * @param request request
+     * @param redirectAttributes redirection attributes
+     * @return jsp page name
      */
     @RequestMapping(value = "/list/{sorted}", method = RequestMethod.GET)
     public String listsorted(Model model,
@@ -68,8 +68,8 @@ public class ReservationController {
         List<ReservationDTO> reservations;
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
 
-        //if (authUser != null) {
-            //if (authUser.getUserRoleType() == UserRoleType.ADMINISTRATOR) {
+        if (authUser != null) {
+            if (authUser.getIsAdmin()) {
                 switch (sorted) {
                     case "sorted" :
                         reservations = reservationFacade.findAllSortedByDate();
@@ -83,30 +83,29 @@ public class ReservationController {
                 }
                         
                 
-            /*} else {
+            } else {
                 LOGGER.warn("no administrator GET list/" + sorted);
-                redirectAttributes.addFlashAttribute("alert_danger",
-                    "You are not administrator.");
-                return "";
-            }  */  
-        /*} else {
+                reservations = reservationFacade.findReservationByUser(authUser.getId()); 
+            }  
+        } else {
             LOGGER.warn("GET listSorted /list/{} failed. Unauthorized", sorted);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
         model.addAttribute("reservations", reservations);
         model.addAttribute("users", userFacade.findAll());
         return LISTALL;
     }
     
+    
     /**
-     * asd
-     * @param id asd
-     * @param model asdas
-     * @param redirectAttributes asdsa
-     * @param req asdsad
-     * @return  asdsad
+     * Show details about one reservation
+     * @param id id of reservation
+     * @param model data to show
+     * @param redirectAttributes redirection attributes
+     * @param req request
+     * @return jsp page name
      */
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public String detail(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes,
@@ -116,7 +115,7 @@ public class ReservationController {
         ReservationDTO reservationDTO;
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
         
-        //if (authUser != null) {
+        if (authUser != null) {
             try {        
                 reservationDTO = reservationFacade.findReservationById(id);
                 if (reservationDTO == null) {
@@ -125,24 +124,24 @@ public class ReservationController {
                     return "redirect:/reservation/list/all";
                 }
 
-                /*if (authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR && 
+                if (!authUser.getIsAdmin() && 
                 !authUser.getId().equals(reservationDTO.getUser().getId())) {
                     redirectAttributes.addFlashAttribute("alert_danger", 
                 "You don't have permission to show other people's reservation");
                     return "redirect:/reservation/list";
-                } */
+                }
             } catch (TravelAgencyServiceException ex) {
                 LOGGER.error("request: GET reservation/detail/{}; user id={}", id, authUser.getId(), ex);
                 redirectAttributes.addFlashAttribute(
                         "alert_danger", "Reservation with id=" + id + " isn't accessible.");
                 return "redirect:/reservation/list/all";
             }
-        /*} else { 
+        } else { 
             LOGGER.warn("GET detail /detail/{} failed. Unauthorized", id);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
         
         model.addAttribute("reservation", reservationDTO);
         return "reservation/detail";
@@ -150,11 +149,11 @@ public class ReservationController {
     
     
     /**
-     * asd
-     * @param id asd
-     * @param req asd
-     * @param redirectAttributes asdas
-     * @return  asddas
+     * Delete one reservation
+     * @param id id of reservation to delete
+     * @param req request
+     * @param redirectAttributes redirection attributes
+     * @return jsp page name
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String delete(
@@ -167,7 +166,7 @@ public class ReservationController {
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
         ReservationDTO reservationDTO;
         
-        //if (authUser != null) {
+        if (authUser != null) {
             try {
                 reservationDTO = reservationFacade.findReservationById(id);
                 if (reservationDTO == null) {
@@ -176,12 +175,12 @@ public class ReservationController {
                     return "redirect:/reservation/list/all";
                 }
 
-                /*if (authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR && 
+                if (!authUser.getIsAdmin() && 
                     !authUser.getId().equals(reservationDTO.getUser().getId())) {
                         redirectAttributes.addFlashAttribute("alert_danger", 
                     "You don't have permission to delete other people's reservation");
                         return "redirect:/reservation/list";
-                }*/
+                }
                 reservationFacade.removeReservation(reservationDTO.getId());
             } catch (TravelAgencyServiceException ex) {
                 LOGGER.error("GET /reservatin/delete/" + id, ex);
@@ -190,12 +189,12 @@ public class ReservationController {
                             " couldn't be deleted right now.");
                 return "redirect:/reservation/list/all";   
             }
-        /*} else { 
+        } else { 
             LOGGER.warn("GET delete /delete/{} failed. Unauthorized", id);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
             
         redirectAttributes.addFlashAttribute(
                     "alert_success", "Reservation with id="+ id +
@@ -204,11 +203,11 @@ public class ReservationController {
     }
     
     /**
-     * asd
-     * @param id asd
-     * @param req asd
-     * @param redirectAttributes ads
-     * @return ads
+     * Set reservation to paid state
+     * @param id id of reservation to pay
+     * @param req request
+     * @param redirectAttributes redirection attributes
+     * @return jsp page name
      */
     @RequestMapping(value = "/paid/{id}", method = RequestMethod.GET)
     public String paid(
@@ -221,7 +220,7 @@ public class ReservationController {
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
         ReservationDTO reservationDTO;
         
-        //if (authUser != null) {
+        if (authUser != null) {
             try {
                 reservationDTO = reservationFacade.findReservationById(id);
                 if (reservationDTO == null) {
@@ -230,12 +229,12 @@ public class ReservationController {
                     return "redirect:/reservation/list/all";
                 }
 
-                /*if (authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR && 
+                if (!authUser.getIsAdmin() && 
                     !authUser.getId().equals(reservationDTO.getUser().getId())) {
                     redirectAttributes.addFlashAttribute("alert_danger", 
                     "You don't have permission to paid other people's reservation");
                     return "redirect:/reservation/list";
-                }*/
+                }
                 reservationFacade.setReservationPaid(reservationDTO.getId());
             } catch (TravelAgencyServiceException ex) {
                 LOGGER.error("GET /reservatin/paid/" + id, ex);
@@ -244,12 +243,12 @@ public class ReservationController {
                             " couldn't be paid right now.");
                 return "redirect:/reservation/list/all";    
             }
-        /*} else { 
+        } else { 
             LOGGER.warn("GET paid /paid/{} failed. Unauthorized", id);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/    
+        }    
             
         redirectAttributes.addFlashAttribute(
                     "alert_success", "Reservation with id="+ id +
@@ -258,11 +257,11 @@ public class ReservationController {
     }
     
     /**
-     * asd
-     * @param id asd
-     * @param req asd
-     * @param redirectAttributes ads
-     * @return ads
+     * Set reservation to notpaid state
+     * @param id id of reservation to set notpaid
+     * @param req request
+     * @param redirectAttributes redirection attributes
+     * @return jsp page name
      */
     @RequestMapping(value = "/notpaid/{id}", method = RequestMethod.GET)
     public String notpaid(
@@ -275,7 +274,7 @@ public class ReservationController {
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
         ReservationDTO reservationDTO;
         
-        //if (authUser != null) {
+        if (authUser != null) {
             try {
                 reservationDTO = reservationFacade.findReservationById(id);
                 if (reservationDTO == null) {
@@ -284,12 +283,12 @@ public class ReservationController {
                     return "redirect:/reservation/list/all";
                 }
 
-                /*if (authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR && 
+                if (!authUser.getIsAdmin() && 
                     !authUser.getId().equals(reservationDTO.getUser().getId())) {
                     redirectAttributes.addFlashAttribute("alert_danger", 
                         "You don't have permission to paid other people's reservation");
                     return "redirect:/reservation/list";
-                }*/
+                }
                 reservationFacade.setReservationNotPaid(reservationDTO.getId());
             } catch (TravelAgencyServiceException ex) {
                 LOGGER.error("GET /reservatin/paid/" + id, ex);
@@ -298,12 +297,12 @@ public class ReservationController {
                             " couldn't be notpaid right now.");
                 return "redirect:/reservation/list/all";   
             }
-        /*} else { 
+        } else { 
             LOGGER.warn("GET notpaid /notpaid/{} failed. Unauthorized", id);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
         redirectAttributes.addFlashAttribute(
                     "alert_success", "Reservation with id="+ id +
                             " was set to NotPaid.");
@@ -311,20 +310,20 @@ public class ReservationController {
     }
     
     /**
-     * asd
-     * @param id asd
-     * @param model asd
-     * @param redAttr asd
-     * @param res asd
-     * @param req asd
-     * @return  asdas
+     * Edit reservation info 
+     * @param id id of reservation to edit
+     * @param model data to show
+     * @param redAttr redirection attributes
+     * @param res http servetl response
+     * @param req request
+     * @return jsp page name
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable Long id, Model model, 
             RedirectAttributes redAttr, HttpServletResponse res, HttpServletRequest req) {
         LOGGER.info("GET /edit/" + id);
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
-        //if (authUser != null) {
+        if (authUser != null) {
             List<ExcursionDTO> excursions = excursionFacade.getAllExcursions();
             ReservationDTO reservation = reservationFacade.findReservationById(id);
             TripDTO trip = tripFacade.getTripWithId(reservation.getTrip().getId());
@@ -332,31 +331,31 @@ public class ReservationController {
             
             model.addAttribute("excursions", excursions);
             model.addAttribute("reservation", reservation);
-        /*} else { 
+        } else { 
             LOGGER.warn("GET edit /edit/{} failed. Unauthorized", id);
-            redirectAttributes.addFlashAttribute("alert_danger",
+            redAttr.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
         return "reservation/edit";
 
     }
     
     /**
-     * asda
-     * @param id asda
-     * @param model asda
-     * @param redirectAttributes adsads
-     * @param res asdad 
-     * @param req asdasd 
-     * @return asdad
+     * Update reservation
+     * @param id id of reservation to update
+     * @param model data to show
+     * @param redirectAttributes redirection attributes
+     * @param res http servetl response
+     * @param req request
+     * @return jsp page name
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String update(@PathVariable Long id, Model model, 
             RedirectAttributes redirectAttributes, HttpServletResponse res, HttpServletRequest req) {
         LOGGER.info("GET /edit/" + id);
         UserDTO authUser = (UserDTO) req.getSession().getAttribute("authenticatedUser");
-        //if (authUser != null) {
+        if (authUser != null) {
             String[] list = req.getParameterValues("id");
             ReservationDTO reservationDTO = reservationFacade.findReservationById(id);
            List<Long> exc = new ArrayList<>();
@@ -376,12 +375,12 @@ public class ReservationController {
             }
             
 
-        /*} else { 
+        } else { 
             LOGGER.warn("GET edit /edit/{} failed. Unauthorized", id);
             redirectAttributes.addFlashAttribute("alert_danger",
                         "Unanthorized.");
             return "redirect:/auth/login";
-        }*/
+        }
         redirectAttributes.addFlashAttribute(
                     "alert_success", "Reservation with id="+ id +
                             " was updated.");

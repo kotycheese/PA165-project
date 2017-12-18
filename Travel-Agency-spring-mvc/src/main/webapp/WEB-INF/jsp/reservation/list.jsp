@@ -7,7 +7,7 @@
 
 <my:pagetemplate title="Reservations">
 <jsp:attribute name="body">
-    <%--<c:if test="${authenticatedUser.isAdmin()}">--%>
+    <c:if test="${authenticatedUser.isAdmin()}">
     <div class="row">
         <div class="btn">
             <form method="get" action="${pageContext.request.contextPath}/reservation/list/all">
@@ -25,7 +25,7 @@
             </form>
         </div>   
     </div>     
-    <%--</c:if>--%>   
+    </c:if>   
     <table class="table">
         <thead>
         <tr>
@@ -63,14 +63,14 @@
                 <td>
                     <a href="${pageContext.request.contextPath}/reservation/detail/${reservation.id}" class="btn btn-primary"><f:message key="reservation.list.detail.button"/></a>
                 </td>
-                <%--<c:if test="${authenticatedUser.isAdmin()}">--%>
+                <c:if test="${authenticatedUser.isAdmin()}">
                 <td>
                     <a href="${pageContext.request.contextPath}/reservation/paid/${reservation.id}" class="btn btn-success"><f:message key="reservation.list.set.paid"/></a>
                 </td>
                 <td>
                     <a href="${pageContext.request.contextPath}/reservation/notpaid/${reservation.id}" class="btn btn-success"><f:message key="reservation.list.set.notpaid"/></a>
                 </td>
-                <%--</c:if>--%>
+                </c:if>
                 <td>
                     <a href="${pageContext.request.contextPath}/reservation/delete/${reservation.id}" class="btn btn-danger"><f:message key="reservation.list.delete.button"/></a>
                 </td> 

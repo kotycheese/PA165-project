@@ -51,11 +51,11 @@
                 </tr>
                 </c:if>    
         </table>
-        <%--<c:if test="${authenticatedUser.isAdmin()}">--%>
+        <c:if test="${authenticatedUser.isAdmin()}">
             <a href="${pageContext.request.contextPath}/reservation/delete/${reservation.id}" 
                 class="btn btn-danger"><f:message key="reservation.list.delete.button"/></a>           
             <a href="${pageContext.request.contextPath}/reservation/edit/${reservation.id}" 
                 class="btn btn-success"><f:message key="reservation.list.edit.button"/></a>               
-        <%--</c:if>--%>      
+        </c:if>      
     </jsp:attribute>
 </my:pagetemplate>
