@@ -4,7 +4,6 @@ import fi.muni.cz.pa165.travelagency.dto.ExcursionDTO;
 import fi.muni.cz.pa165.travelagency.dto.TripCreateDTO;
 import fi.muni.cz.pa165.travelagency.dto.TripDTO;
 import fi.muni.cz.pa165.travelagency.dto.UserDTO;
-import fi.muni.cz.pa165.travelagency.enums.UserRoleType;
 import fi.muni.cz.pa165.travelagency.facade.ExcursionFacade;
 import fi.muni.cz.pa165.travelagency.facade.ReservationFacade;
 import fi.muni.cz.pa165.travelagency.facade.TripFacade;
@@ -61,7 +60,7 @@ public class TripController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -87,7 +86,7 @@ public class TripController {
                          RedirectAttributes redirectAttributes) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -120,7 +119,7 @@ public class TripController {
                        RedirectAttributes redirectAttributes) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -144,7 +143,7 @@ public class TripController {
     public String newTrip(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -194,7 +193,7 @@ public class TripController {
                          HttpServletRequest request) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -245,7 +244,7 @@ public class TripController {
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
@@ -290,7 +289,7 @@ public class TripController {
                                   Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        if (authUser == null || !authUser.getIsAdmin()) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");

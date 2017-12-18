@@ -1,30 +1,23 @@
 package fi.muni.cz.pa165.travelagency.controllers;
 
-import fi.muni.cz.pa165.travelagency.dto.*;
-import fi.muni.cz.pa165.travelagency.enums.UserRoleType;
+import fi.muni.cz.pa165.travelagency.dto.ReservationCreateDTO;
+import fi.muni.cz.pa165.travelagency.dto.ReservationDTO;
+import fi.muni.cz.pa165.travelagency.dto.UserDTO;
 import fi.muni.cz.pa165.travelagency.facade.ExcursionFacade;
 import fi.muni.cz.pa165.travelagency.facade.ReservationFacade;
 import fi.muni.cz.pa165.travelagency.facade.TripFacade;
-import fi.muni.cz.pa165.travelagency.forms.TripCreateDTOValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author Pavel Kotala
@@ -120,7 +113,7 @@ public class BrowsingController {
         LOGGER.debug("view({})", id);
         model.addAttribute("trip", reservationDTO.getTrip());
         model.addAttribute("reservation", reservationFacade.findReservationById(id));
-        return "trip/view";
+        return "browsing/view";
     }
 
     /**
@@ -150,7 +143,7 @@ public class BrowsingController {
         LOGGER.debug("view({})", idRes);
         model.addAttribute("trip", reservationDTO.getTrip());
         model.addAttribute("reservation", reservationFacade.findReservationById(idRes));
-        return "trip/view";
+        return "reservation/detail";
     }
 
 
