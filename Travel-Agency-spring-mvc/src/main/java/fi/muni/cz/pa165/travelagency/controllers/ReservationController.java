@@ -77,8 +77,12 @@ public class ReservationController {
                     case "notpaid" :
                         reservations = reservationFacade.findAllNotPaid();
                         break;
+                    case "all" :
+                        reservations = reservationFacade.findAllReservations();
+                        break;
                     default:
-                       reservations = reservationFacade.findAllReservations();
+                       Long id = Long.parseLong(sorted);
+                       reservations = reservationFacade.findReservationByUser(id);
                        break;
                 }
                         
@@ -365,8 +369,15 @@ public class ReservationController {
                 exc.add(Long.valueOf(s).longValue());
             }
             reservationDTO.setExcursionsReserved(new HashSet<>());
+
             try {
                 reservationFacade.updateReservation(reservationDTO);
+                if (list == null || list.length == 0) {
+                    model.addAttribute("authenticatedUser", authUser);
+                    redirectAttributes.addFlashAttribute(
+                        "alert_success", "Reservation with id=" + id + " was updated.");
+                    return "redirect:/reservation/list/all";
+                }
                 reservationFacade.addExcrusionsToReservation(id, exc);
             } catch (TravelAgencyServiceException ex) {
                 LOGGER.warn("GET update /update/{} failed.", id);

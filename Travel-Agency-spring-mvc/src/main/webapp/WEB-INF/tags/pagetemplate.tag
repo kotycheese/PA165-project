@@ -39,8 +39,10 @@
                      <ul class="dropdown-menu">
                          <li><my:a href="/reservation/list/all"><f:message key="reservations"/></my:a></li>
                          <li><my:a href="/user/list"><f:message key="users"/></my:a></li>
-                         <li><my:a href="/trip/list"><f:message key="trips"/></my:a></li>
-                         <li><my:a href="/excursion/list"><f:message key="excursions"/></my:a></li>
+                         <c:if test="${authenticatedUser.isAdmin}">
+                            <li><my:a href="/trip/list"><f:message key="trips"/></my:a></li>
+                            <li><my:a href="/excursion/list"><f:message key="excursions"/></my:a></li>
+                         </c:if>
                      </ul>
                  </li>
              </ul>
