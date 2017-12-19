@@ -151,7 +151,7 @@ public class BrowsingController {
         LOGGER.debug("view({})", idRes);
         model.addAttribute("trip", reservationDTO.getTrip());
         model.addAttribute("reservation", reservationFacade.findReservationById(idRes));
-        return "reservation/detail";
+        return "browsing/view";
     }
 
     /**
