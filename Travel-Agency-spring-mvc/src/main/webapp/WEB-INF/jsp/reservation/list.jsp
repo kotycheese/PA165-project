@@ -55,7 +55,7 @@
                 <td>
                 <c:forEach items="${reservation.excursionsReserved}" var="ex">
                     <a href="${pageContext.request.contextPath}/excursion/view/${ex.id}">
-                        ${ex.destination}<br>
+                        ${ex.description}<br>
                     </a>
                 </c:forEach>
                 </td>
@@ -72,9 +72,11 @@
                     <a href="${pageContext.request.contextPath}/reservation/notpaid/${reservation.id}" class="btn btn-success"><f:message key="reservation.list.set.notpaid"/></a>
                 </td>
                 </c:if>
+                <c:if test="${authenticatedUser.isAdmin}">
                 <td>
                     <a href="${pageContext.request.contextPath}/reservation/delete/${reservation.id}" class="btn btn-danger"><f:message key="reservation.list.delete.button"/></a>
                 </td> 
+                </c:if>
             </tr>
         </c:forEach>
         </tbody>

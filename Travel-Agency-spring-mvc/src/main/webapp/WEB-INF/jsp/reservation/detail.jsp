@@ -45,7 +45,7 @@
                     <td>    
                     <c:forEach items="${reservation.excursionsReserved}" var="excursion">
                             <a href="${pageContext.request.contextPath}/excursion/view/${excursion.id}">
-                                ${excursion.destination}
+                                ${excursion.description}
                             </a> <c:out value="${excursion.price} "></c:out><strong><f:message key="reservation.list.currency"/></strong><br>
                             </c:forEach>
                      </td>   
