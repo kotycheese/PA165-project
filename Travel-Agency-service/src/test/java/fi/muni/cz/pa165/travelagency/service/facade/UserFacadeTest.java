@@ -119,7 +119,7 @@ public class UserFacadeTest extends AbstractTestNGSpringContextTests {
 
         Set<Reservation> listReservations = new HashSet<>();
         listReservations.add(reservation);
-        user.setReservation(listReservations);
+        user.setReservations(listReservations);
 
         Set<ReservationDTO> listReservationsNewDTO = new HashSet<>();
         listReservationsDTO.add(reservationNewDTO);
@@ -127,7 +127,7 @@ public class UserFacadeTest extends AbstractTestNGSpringContextTests {
 
         Set<Reservation> listReservationsNew = new HashSet<>();
         listReservationsNew.add(reservationNew);
-        userNew.setReservation(listReservationsNew);
+        userNew.setReservations(listReservationsNew);
 
         Trip trip = new Trip();
         trip.setName("tripName");

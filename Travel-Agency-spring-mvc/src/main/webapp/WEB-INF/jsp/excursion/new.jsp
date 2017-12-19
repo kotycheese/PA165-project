@@ -40,7 +40,6 @@
         </div>
         <div class="form-group ${excursionDate_error?'has-error':''}">
             <form:label path="excursionDate" cssClass="col-sm-2 control-label"><f:message key="excursion.excursionDate"/></form:label>
-            <c:set var="now" value="<%=new java.util.Date()%>"/>>
             <div class="col-sm-10">
                 <form:input path="excursionDate" cssClass="form-control"/>
                 <form:errors path="excursionDate" cssClass="help-block"/>

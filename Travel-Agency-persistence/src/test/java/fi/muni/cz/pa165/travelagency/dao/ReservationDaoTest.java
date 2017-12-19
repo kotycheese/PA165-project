@@ -70,7 +70,7 @@ public class ReservationDaoTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(compared.getUser(), this.reservation.getUser());
         Assert.assertEquals(compared.getId(), this.reservation.getId());
         Assert.assertEquals(compared.getPaymentState(), this.reservation.getPaymentState());
-        Assert.assertEquals(compared.getExcursions(), this.reservation.getExcursions());
+        Assert.assertEquals(compared.getExcursionsReserved(), this.reservation.getExcursionsReserved());
         Assert.assertEquals(compared.getTrip(), this.reservation.getTrip());
     }
 

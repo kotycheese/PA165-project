@@ -29,10 +29,10 @@
                     </tr>
                     <tr>
                         <td><label for="phoneNumber" ><fmt:message key="user.edit.phoneNumber"/></label></td>
-                        <td><form:input id="phoneNumber" name="phoneNumber" path="phoneNumber" type="text" value="${user.phoneNumber}" pattern="^[0-9]{9}"/></td>
+                        <td><form:input placeholder="123456789" id="phoneNumber" name="phoneNumber" path="phoneNumber" type="text" value="${user.phoneNumber}" pattern="^[0-9]{9}"/></td>
                     </tr>
                     <tr>
-                        <td><label for="idCardNumber" ><fmt:message key="idCard"/></label></td>
+                        <td><label for="idCardNumber" ><fmt:message key="user.edit.idCard"/></label></td>
                         <td><form:input id="idCardNumber" name="idCardNumber" path="idCardNumber" type="text" value="${user.idCardNumber}"/></td>
                     </tr>
                     <tr>
@@ -44,10 +44,32 @@
                             <a href="${pageContext.request.contextPath}/reservation/list/${user.id}" class="btn btn-primary"><fmt:message key="reservations"/></a>
                         </td>
                     </tr>
-
                 </table>
                 <button class="btn btn-lg btn-primary" type="submit" ><fmt:message key="user.edit.save"/></button>
             </form:form>
+            <div class="row">
+                <h2><fmt:message key="reservations" /></h2>
+                <div class="col-md-6 col-lg-9">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><fmt:message key="id" /></th>
+                            <th><fmt:message key="trip.name" /></th>
+                            <th><fmt:message key="user.list.detail"/></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="reservation" items="${user.reservations}">
+                            <tr>
+                                <td><c:out value="${reservation.id}" /></td>
+                                <td><c:out value="${reservation.trip.name}" /></td>
+                                <td><a href="${pageContext.request.contextPath}/reservation/detail/${reservation.id}"><fmt:message key="view"/></a></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </jsp:attribute>
     </my:pagetemplate>
 </c:if>

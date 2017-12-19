@@ -36,11 +36,11 @@
         <c:forEach items="${excursions}" var="excursion">
             <tr>
                 <td><c:out value="${excursion.id}"/></td>
-                <td><f:formatDate value="${excursion.excursionDate}" pattern="dd-MM-yyyy"/></td>
+                <td><f:formatDate value="${excursion.excursionDate}" pattern="yyyy-MM-dd"/></td>
                 <td><c:out value="${excursion.duration}"/></td>
                 <td><c:out value="${excursion.destination}"/></td>
                 <td><c:out value="${excursion.description}"/></td>
-                <td><c:out value="${excursion.price} €"/></td>
+                <td><c:out value="${excursion.price} CZK"/></td>
                 <td>
                     <my:a href="/excursion/view/${excursion.id}" class="btn btn-primary"><f:message key="view"/></my:a>
                 </td>

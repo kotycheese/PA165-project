@@ -6,7 +6,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<my:pagetemplate title="Reservation's edit">
+<my:pagetemplate>
+    <jsp:attribute name="title"><f:message key="reservation.edit.title"/></jsp:attribute>
     <jsp:attribute name="body">
         <h3><f:message key="reservation.list.edit.excursions"/>:</h3>
         <form action="${pageContext.request.contextPath}/reservation/update/${reservation.id}" method="get">

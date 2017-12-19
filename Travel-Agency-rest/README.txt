@@ -10,5 +10,5 @@ curl -i -X GET http://localhost:8080/pa165/rest/trips
 List with id 1
 curl -i -X GET http://localhost:8080/pa165/rest/trips/1
 
-Delete with id 1
-curl -i -X DELETE http://localhost:8080/pa165/rest/trips/1
+Delete trip you created at beginning with id 4 (If you try to delete trip that has already Reservation it with fail, this is not allowed!)
+curl -i -X DELETE http://localhost:8080/pa165/rest/trips/4

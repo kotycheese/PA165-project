@@ -156,7 +156,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             Reservation r = reservationDao.findById(reservation.getId());
             BigDecimal price = r.getTrip().getPrice();
-            for (Excursion e: r.getExcursions()) {
+            for (Excursion e: r.getExcursionsReserved()) {
                 price = price.add(e.getPrice());
             }
             return price;

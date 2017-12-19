@@ -8,11 +8,12 @@ package fi.muni.cz.pa165.travelagency.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +56,7 @@ public class Trip implements Serializable, Comparable<Trip> {
         this.dateTo = dateTo;
         this.destination = destination;
         this.availableSpots = availableSpots;
-        this.excursions.addAll(excursions);
+        this.excursions = excursions;
         this.name = name;
         this.price = price;
     }
@@ -74,7 +75,10 @@ public class Trip implements Serializable, Comparable<Trip> {
     
     private int availableSpots;
     
-    @ManyToMany
+    @ManyToMany(cascade = { 
+        CascadeType.PERSIST, 
+        CascadeType.MERGE
+    })
     @JoinTable(name="TRIP_EXC",
             joinColumns = @JoinColumn(name = "Trip_id"),
             inverseJoinColumns = @JoinColumn(name = "Excursion_id"))
@@ -155,7 +159,7 @@ public class Trip implements Serializable, Comparable<Trip> {
      * @return unmodifiable set of possible excursions for the trip.
      */
     public Set<Excursion> getExcursions() {
-        return Collections.unmodifiableSet(excursions);
+        return excursions;
     }
 
     /**

@@ -2,7 +2,6 @@ package fi.muni.cz.pa165.travelagency.dto;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -23,6 +22,10 @@ public class TripDTO {
     private int availableSpots;
 
     private Set<ExcursionDTO> excursions = new HashSet<>();
+
+    public void setExcursions(Set<ExcursionDTO> excursions) {
+        this.excursions = excursions;
+    }
 
     private String name;
 
@@ -124,7 +127,7 @@ public class TripDTO {
      * @return unmodifiable set of possible excursions for the trip.
      */
     public Set<ExcursionDTO> getExcursions() {
-        return Collections.unmodifiableSet(excursions);
+        return excursions;
     }
 
     /**
@@ -223,7 +226,7 @@ public class TripDTO {
                 ", dateTo=" + dateTo +
                 ", destination='" + destination + '\'' +
                 ", availableSpots=" + availableSpots +
-                ", excursions=" + excursions +
+                ", excursions=" + excursions.size() +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 '}';

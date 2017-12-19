@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -68,7 +67,7 @@ public class Excursion implements Serializable {
      */
     @NotNull
     @Temporal(TemporalType.DATE)
-    private java.util.Date excursionDate;
+    private Date excursionDate;
     
     /*
      * The duration of the Excursion.
@@ -286,7 +285,7 @@ public class Excursion implements Serializable {
      * @return unmodifiable set of trips that include this excursion.
      */
     public Set<Trip> getTrips() {
-        return Collections.unmodifiableSet(trips);
+        return trips;
     }
 
     /**

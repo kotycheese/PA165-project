@@ -138,11 +138,11 @@ public class ExcursionDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.excursionDate);
-        hash = 71 * hash + Objects.hashCode(this.description);
-        hash = 71 * hash + Objects.hashCode(this.duration);
-        hash = 71 * hash + Objects.hashCode(this.destination);
-        hash = 71 * hash + Objects.hashCode(this.price);
+        hash = 29 * hash + Objects.hashCode(this.excursionDate);
+        hash = 29 * hash + Objects.hashCode(this.description);
+        hash = 29 * hash + Objects.hashCode(this.duration);
+        hash = 29* hash + Objects.hashCode(this.destination);
+        hash = 29* hash + Objects.hashCode(this.price);
         return hash;
     }
 

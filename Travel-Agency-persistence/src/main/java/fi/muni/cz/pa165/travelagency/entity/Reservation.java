@@ -3,7 +3,6 @@ package fi.muni.cz.pa165.travelagency.entity;
 import fi.muni.cz.pa165.travelagency.enums.PaymentStateType;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -57,7 +56,7 @@ public class Reservation implements Serializable {
     @JoinTable(name="RESERVED_EXC",
             joinColumns = @JoinColumn(name = "Reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "Excursion_id"))
-    private Set<Excursion> excursions = new HashSet<>();
+    private Set<Excursion> excursionsReserved = new HashSet<>();
     
     @NotNull
     @ManyToOne(optional=false)
@@ -79,8 +78,8 @@ public class Reservation implements Serializable {
         return user;
     }
 
-    public Set<Excursion> getExcursions() {
-        return Collections.unmodifiableSet(excursions);
+    public Set<Excursion> getExcursionsReserved() {
+        return excursionsReserved;
     }
     
     /**
@@ -89,7 +88,7 @@ public class Reservation implements Serializable {
      * @param excursion excursion to be added.
      */
     public void addReservedExcursion(Excursion excursion) {
-        excursions.add(excursion);
+        excursionsReserved.add(excursion);
     }
     
     /**
@@ -98,16 +97,16 @@ public class Reservation implements Serializable {
      * @param excursion excursion to be removed
      */
     public void removeReservedExcursion(Excursion excursion) {
-        excursions.remove(excursion);
+        excursionsReserved.remove(excursion);
     }
 
     /**
-     * Add all excursions from given collection.
+     * Add all excursionsReserved from given collection.
      * 
      * @param excursions collection of excursion to be added
      */
     public void addAllReservedExcursions(Collection<Excursion> excursions) {
-        this.excursions.addAll(excursions);
+        this.excursionsReserved.addAll(excursions);
     }
     
     public void setUser(User user) {

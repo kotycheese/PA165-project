@@ -12,10 +12,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Date;
-import java.util.Collections;
 
 /**
  * Created by martin on 22.10.2017.
@@ -210,14 +210,14 @@ public class User implements Serializable {
      * @return Reservations
      */
     public Set<Reservation> getReservations() {
-        return Collections.unmodifiableSet(reservations);
+        return reservations;
     }
 
     /**
      * Basic setter
      * @param reservations reservations
      */
-    public void setReservation(Set<Reservation> reservations) {
+    public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
     }
 
@@ -267,7 +267,7 @@ public class User implements Serializable {
 
         User user = (User) o;
 
-        return this.idCardNumber.equals(user.getIdCardNumber());
+        return Objects.equals(this.idCardNumber, user.getIdCardNumber());
     }
 
     /**
@@ -276,6 +276,6 @@ public class User implements Serializable {
      */
     @Override
     public int hashCode() {
-        return 31 * idCardNumber.hashCode();
+        return Objects.hash(this.idCardNumber);
     }
 }

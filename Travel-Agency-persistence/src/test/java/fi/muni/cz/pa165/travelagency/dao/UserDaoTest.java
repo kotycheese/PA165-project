@@ -22,6 +22,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * Tests for User Dao implementation.
  *
@@ -109,7 +111,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests{
         //Assert.assertEquals(userDao.findAll().size(), 1);
     }
     
-    @Test(expectedExceptions=NullPointerException.class)
+    @Test(expectedExceptions = ConstraintViolationException.class)
     public void testNullUser(){
         User nullBudy = new User();
         userDao.create(nullBudy);

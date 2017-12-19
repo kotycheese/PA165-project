@@ -144,7 +144,7 @@ public class ReservationFacadeTest extends AbstractTestNGSpringContextTests {
         reservationDTO.setId(1l);
         reservationDTO.setCreated(Date.valueOf("2014-1-1"));
         reservationDTO.setUser(userDTO);
-        reservationDTO.setExcursions(Sets.newLinkedHashSet(excursionDTO));
+        reservationDTO.setExcursionsReserved(Sets.newLinkedHashSet(excursionDTO));
         reservationDTO.setTrip(tripDTO);
 
     }
@@ -214,7 +214,7 @@ public class ReservationFacadeTest extends AbstractTestNGSpringContextTests {
                 .mapTo(reservationDTO, Reservation.class))).thenReturn(new BigDecimal("2000"));
         assertEquals(reservationFacade.findAllReservations().get(0).getCreated(), reservationDTO.getCreated());
         assertEquals(reservationFacade.findAllReservations().get(0).getUser(), reservationDTO.getUser());
-        assertEquals(reservationFacade.findAllReservations().get(0).getExcursions().size(), reservationDTO.getExcursions().size());
+        assertEquals(reservationFacade.findAllReservations().get(0).getExcursionsReserved().size(), reservationDTO.getExcursionsReserved().size());
         assertEquals(reservationFacade.findAllReservations().get(0).getTotalPrice(), reservationDTO.getTotalPrice());
         assertEquals(reservationFacade.findAllReservations().get(0).getTrip(), reservationDTO.getTrip());
     }

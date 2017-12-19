@@ -24,7 +24,7 @@ public class ReservationDTO {
     @NotNull
     private TripDTO trip;
     
-    private Set<ExcursionDTO> excursions = new HashSet<>();
+    private Set<ExcursionDTO> excursionsReserved = new HashSet<>();
 
     @NotNull
     private UserDTO user;
@@ -74,12 +74,12 @@ public class ReservationDTO {
         this.trip = trip;
     }
 
-    public Set<ExcursionDTO> getExcursions() {
-        return excursions;
+    public Set<ExcursionDTO> getExcursionsReserved() {
+        return excursionsReserved;
     }
 
-    public void setExcursions(Set<ExcursionDTO> excursions) {
-        this.excursions = excursions;
+    public void setExcursionsReserved(Set<ExcursionDTO> excursionsReserved) {
+        this.excursionsReserved = excursionsReserved;
     }
 
     public BigDecimal getTotalPrice() {
@@ -129,7 +129,7 @@ public class ReservationDTO {
     @Override
     public String toString() {
         return "ReservationDTO{" + "id=" + id + ", created=" + created 
-                + ", trip=" + trip + ", excursions=" + excursions 
+                + ", trip=" + trip + ", excursions=" + excursionsReserved 
                 + ", user=" + user + ", totalPrice=" + totalPrice + '}';
     }
     

@@ -67,8 +67,8 @@
             <tr>
                 <th><f:message key="trip.id"/></th>
                 <th><f:message key="trip.name"/></th>
-                <th><f:message key="trip.dateFrom"/></th>
-                <th><f:message key="trip.dateTo"/></th>
+                <th><f:message key="trip.from"/></th>
+                <th><f:message key="trip.to"/></th>
                 <th><f:message key="trip.destination"/></th>
                 <th><f:message key="trip.availableSpots"/></th>
                 <th><f:message key="trip.price"/></th>
@@ -85,7 +85,7 @@
                     <td><c:out value="${trip.availableSpots}"/></td>
                     <td><c:out value="${trip.price}"/></td>
                     <td>
-                        <my:a href="/trip/view/${excursion.id}" class="btn btn-primary"><f:message key="view"/></my:a>
+                        <my:a href="/trip/view/${trip.id}" class="btn btn-primary"><f:message key="view"/></my:a>
                     </td>
                 </tr>
             </c:forEach>

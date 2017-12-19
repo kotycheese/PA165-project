@@ -364,7 +364,7 @@ public class ReservationController {
             for (String s : list ) {
                 exc.add(Long.valueOf(s).longValue());
             }
-            reservationDTO.setExcursions(new HashSet<>());
+            reservationDTO.setExcursionsReserved(new HashSet<>());
             try {
                 reservationFacade.updateReservation(reservationDTO);
                 reservationFacade.addExcrusionsToReservation(id, exc);

@@ -59,7 +59,7 @@ public class TripsController {
         if (tripDTO != null) {
             return tripDTO;
         } else {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("Can't delete trip that is reserved.");
         }
     }
     

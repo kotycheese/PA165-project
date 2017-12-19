@@ -106,7 +106,7 @@ public class ReservationServiceTest extends AbstractTransactionalTestNGSpringCon
         when(reservationDao.findById(reservation.getId())).thenReturn(reservation);
         reservationService.addExcrusionsToReservation(reservation, 
                 Arrays.asList(excursion));
-        assertEquals(reservation.getExcursions().size(), 1);
+        assertEquals(reservation.getExcursionsReserved().size(), 1);
         
     }
     
@@ -247,7 +247,7 @@ public class ReservationServiceTest extends AbstractTransactionalTestNGSpringCon
         assertEquals(reservation1.getId(), reservation2.getId());
         assertEquals(reservation1.getCreated(), reservation2.getCreated());
         assertEquals(reservation1.getUser(), reservation2.getUser());
-        assertEquals(reservation1.getExcursions(), reservation2.getExcursions());
+        assertEquals(reservation1.getExcursionsReserved(), reservation2.getExcursionsReserved());
         assertEquals(reservation1.getTrip(), reservation2.getTrip());
         assertEquals(reservation1.getPaymentState(), reservation2.getPaymentState());
     }

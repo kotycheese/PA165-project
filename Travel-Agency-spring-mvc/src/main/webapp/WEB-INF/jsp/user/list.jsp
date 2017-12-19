@@ -23,10 +23,9 @@
                 <th><fmt:message key="surname"/></th>
                 <th><fmt:message key="name"/></th>
                 <th><fmt:message key="email"/></th>
-                <th><fmt:message key="reservations"/></th>
                 <th><fmt:message key="user.list.detail"/></th>
-                <th><fmt:message key="edit"/></th>
                 <th><fmt:message key="user.list.remove"/></th>
+                <th><fmt:message key="edit"/></th>
             </tr>
             </thead>
             <tbody>
@@ -37,18 +36,15 @@
                         <td><c:out value="${user.name}" /></td>
                         <td><c:out value="${user.email}" /></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/reservation/list/${user.id}" class="btn btn-primary">Reservations</a>
-                        </td>>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/user/view/${user.id}" class="btn btn-primary">View</a>
-                        </td>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/user/edit/${user.id}" class="btn btn-primary">Edit</a>
+                            <a href="${pageContext.request.contextPath}/user/view/${user.id}" class="btn btn-primary"><fmt:message key="view"/></a>
                         </td>
                         <td>
                             <form method="POST" action="${pageContext.request.contextPath}/user/remove/${user.id}">
                                 <button type="submit" class="btn btn-primary"><fmt:message key="user.list.remove"/></button>
                             </form>
+                        </td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/user/edit/${user.id}" class="btn btn-primary"><fmt:message key="edit"/></a>
                         </td>
                     </tr>
                 </c:forEach>

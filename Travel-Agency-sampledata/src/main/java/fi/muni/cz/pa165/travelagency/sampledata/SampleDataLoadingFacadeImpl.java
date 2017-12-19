@@ -197,7 +197,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade{
         user.setIdCardNumber(idCardNumber);
         user.setName(name);
         user.setPhoneNumber(phoneNumber);
-        user.setReservation(reservations);
+        user.setReservations(reservations);
         user.setSurname(surname);
         user.setIsAdmin(isAdmin);
         
