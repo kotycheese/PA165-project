@@ -20,6 +20,7 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         <f:message key="excursion.new"/>
     </my:a>
+        
 
     <table class="table">
         <thead>

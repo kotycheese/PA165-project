@@ -365,9 +365,6 @@ public class ReservationController {
             ReservationDTO reservationDTO = reservationFacade.findReservationById(id);
            List<Long> exc = new ArrayList<>();
             
-            for (String s : list ) {
-                exc.add(Long.valueOf(s).longValue());
-            }
             reservationDTO.setExcursionsReserved(new HashSet<>());
 
             try {
@@ -377,6 +374,9 @@ public class ReservationController {
                     redirectAttributes.addFlashAttribute(
                         "alert_success", "Reservation with id=" + id + " was updated.");
                     return "redirect:/reservation/list/all";
+                }
+                for (String s : list ) {
+                    exc.add(Long.valueOf(s).longValue());
                 }
                 reservationFacade.addExcrusionsToReservation(id, exc);
             } catch (TravelAgencyServiceException ex) {

@@ -12,38 +12,38 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <my:pagetemplate>
-<jsp:attribute name="title"><f:message key="excursion.administration"/></jsp:attribute>
+<jsp:attribute name="title"><f:message key="excursion.admin"/></jsp:attribute>
 <jsp:attribute name="body">
-
+    <c:if test="${authenticatedUser.isAdmin}">
     <form method="post" action="${pageContext.request.contextPath}/excursion/delete/${excursion.id}">
         <button type="submit" class="btn btn-primary"><f:message key="delete"/></button>
     </form>
-
+    </c:if>
 
     <form:form method="post" action="${pageContext.request.contextPath}/excursion/edit/${excursion.id}"
                    modelAttribute="excursion" cssClass="form-horizontal">
-            <div class="form-group ${name_error?'has-error':''}">
+            <div class="form-group ${destination_error?'has-error':''}">
                 <form:label path="destination" cssClass="col-sm-2 control-label"><f:message key="excursion.destination"/></form:label>
                 <div class="col-sm-10">
                     <form:input path="destination" cssClass="form-control"/>
                     <form:errors path="destination" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${dateFrom_error?'has-error':''}">
+            <div class="form-group ${description_error?'has-error':''}">
                 <form:label path="description" cssClass="col-sm-2 control-label"><f:message key="excursion.description"/></form:label>
                 <div class="col-sm-10">
                     <form:input path="description" cssClass="form-control"/>
                     <form:errors path="description" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${dateTo_error?'has-error':''}">
+            <div class="form-group ${duration_error?'has-error':''}">
                 <form:label path="duration" cssClass="col-sm-2 control-label"><f:message key="excursion.duration"/></form:label>
                 <div class="col-sm-10">
                     <form:input path="duration" cssClass="form-control"/>
                     <form:errors path="duration" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${destination_error?'has-error':''}">
+            <div class="form-group ${excursionDate_error?'has-error':''}">
                 <form:label path="excursionDate" cssClass="col-sm-2 control-label"><f:message key="excursion.excursionDate"/></form:label>
                 <div class="col-sm-10">
                     <form:input path="excursionDate" cssClass="form-control"/>
@@ -59,9 +59,10 @@
                 </div>
             </div>
 
-
+<c:if test="${authenticatedUser.isAdmin}">
             <button class="btn btn-primary" type="submit"><f:message key="excursion.edit"/></button>
-        </form:form>
+</c:if>
+    </form:form>
 
     <table class="table">
             <thead>
@@ -93,8 +94,8 @@
             </tbody>
         </table>
 
-    <form method="post" action="${pageContext.request.contextPath}/excursion/resetTrips/${excursion.id}">
-        <button type="submit" class="btn btn-primary"><f:message key="excursion.reset.trips"/></button>
-    </form>
+    <!--<form method="post" action="${pageContext.request.contextPath}/excursion/resetTrips/${excursion.id}">-->
+        <!--<button type="submit" class="btn btn-primary"><f:message key="excursion.reset.trips"/></button>-->
+    <!--</form>-->
 </jsp:attribute>
 </my:pagetemplate>

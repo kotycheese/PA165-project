@@ -16,7 +16,7 @@
 <jsp:attribute name="body">
 
     <form:form method="post" action="${pageContext.request.contextPath}/excursion/create"
-               modelAttribute="excursionCreate" cssClass="form-horizontal">
+               modelAttribute="excursion" cssClass="form-horizontal">
         <div class="form-group ${destination_error?'has-error':''}">
             <form:label path="destination" cssClass="col-sm-2 control-label"><f:message key="excursion.destination"/></form:label>
             <div class="col-sm-10">

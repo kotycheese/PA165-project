@@ -59,17 +59,16 @@ public class ExcursionController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String listAll(Model model, HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
+
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
         if (authUser != null) {
             model.addAttribute("excursions", excursionFacade.getAllExcursions());
+            return "excursion/list";
         } else {
-            redirectAttributes.addFlashAttribute("alert_danger",
-                        "Unanthorized.");
+            redirectAttributes.addFlashAttribute("alert_danger", "Unanthorized.");
             return "redirect:/auth/login";
         }
-        
-        
-        return "excursion/list";
     }
     
     /**
@@ -78,32 +77,39 @@ public class ExcursionController {
      * @param model model
      * @param uriBuilder uri builder
      * @param redirectAttributes redirect attributes
+     * @param request http request
      * @return jsp page name
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
-                         RedirectAttributes redirectAttributes) {
+                         RedirectAttributes redirectAttributes, HttpServletRequest request) {
         
-        if (excursionFacade.getByID(id) == null) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " does not exist");
-            return defaultRedirect;
-        }
-        
-        try {
-            ExcursionDTO excursionDTO = excursionFacade.getByID(id);
-            excursionFacade.deleteExcursion(excursionDTO);
-
-            List<TripDTO> trips = tripFacade.getTripsByDestination(excursionDTO.getDestination());
-            for(TripDTO trip : trips) {
-                tripFacade.refreshExcursions(trip.getId());
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
+        if (authUser != null) {
+            if (excursionFacade.getByID(id) == null) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " does not exist");
+                return defaultRedirect;
             }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " could not be deleted");
-            return defaultRedirect;
+
+            try {
+                excursionFacade.deleteExcursion(excursionFacade.getByID(id));
+
+                List<TripDTO> trips = tripFacade.getTripsByDestination(excursionDTO.getDestination());
+                for(TripDTO trip : trips) {
+                    tripFacade.refreshExcursions(trip.getId());
+                }
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " could not be deleted");
+                return defaultRedirect;
+            }
+            LOGGER.debug("delete({})", id);
+            redirectAttributes.addFlashAttribute("alert_success", "Excursion with id=" + id + " was deleted.");
+            return "redirect:/excursion/list";
+        } else {
+            redirectAttributes.addFlashAttribute("alert_danger", "Unanthorized.");
+            return "redirect:/auth/login";
         }
-        LOGGER.debug("delete({})", id);
-        redirectAttributes.addFlashAttribute("alert_success", "Excursion to with id=" + id + " was deleted.");
-        return "redirect:/excursion/list";
     }
     
     /**
@@ -111,42 +117,51 @@ public class ExcursionController {
      * @param id id of excursion to show
      * @param model model
      * @param redirectAttributes attributes for redirecting
+     * @param request http request
      * @return jsp page name
      */
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
+    public String view(@PathVariable long id, Model model, RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+
         LOGGER.debug("view({})", id);
         
-        if (excursionFacade.getByID(id) == null) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " doesn't exist");
-            return defaultRedirect;
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
+        if (authUser != null) {
+            if (excursionFacade.getByID(id) == null) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " doesn't exist");
+                return defaultRedirect;
+            }
+            model.addAttribute("excursion", excursionFacade.getByID(id));
+            return "excursion/view";
+        } else {
+            redirectAttributes.addFlashAttribute("alert_danger", "Unanthorized.");
+            return "redirect:/auth/login";
         }
-        
-        model.addAttribute("excursion", excursionFacade.getByID(id));
-        return "excursion/view";
     }
     
     /**
      * Prepares an empty form.
      *
      * @param model data to be displayed
-     * @param req session request
+     * @param request http request
      * @param redAttr reddirect attributes
      * @return JSP page
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newExcursion(Model model, HttpServletRequest req, RedirectAttributes redAttr) {
+    public String newExcursion(Model model, HttpServletRequest request, RedirectAttributes redAttr) {
         LOGGER.debug("new()");
         
-        UserDTO authUser = (UserDTO) req.getSession().getAttribute("authUser");
-        
-        /*if (authUser.getUserRoleType() != UserRoleType.ADMINISTRATOR) {
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
+        if (authUser != null) {
+            model.addAttribute("excursion", new ExcursionDTO());
+            return "excursion/new";
+        } else{
             redAttr.addFlashAttribute("alert_danger", "You don't have permission to create new excursion");
             return defaultRedirect;
-        }*/
-        
-        model.addAttribute("excursionCreate", new ExcursionDTO());
-        return "excursion/new";
+        }
     }
     
     /**
@@ -167,15 +182,81 @@ public class ExcursionController {
      *
      * @param formBean ExcursionDTO
      * @param bindingResult results of bind
+     * @param request http request
      * @param model model to transfer
-     * @param redirectAttributes redirect attributes
+     * @param redAttr redirect attributes
      * @param uriBuilder uri builder
      * @return uri to redirect to
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("excursionCreate") ExcursionDTO formBean, BindingResult bindingResult,
-                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-        LOGGER.debug("create(excursionCreate={})", formBean);
+
+    public String create(@ModelAttribute("excursion") ExcursionDTO formBean,
+                         BindingResult bindingResult, HttpServletRequest request,
+                         Model model, RedirectAttributes redAttr,
+                         UriComponentsBuilder uriBuilder) {
+
+        LOGGER.debug("create(excursion={})", formBean);
+
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
+        if (authUser != null) {
+            //in case of validation error forward back to the the form
+            if (bindingResult.hasErrors()) {
+                for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                    LOGGER.info("ObjectError: {}", ge.toString());
+                }
+                for (FieldError fe : bindingResult.getFieldErrors()) {
+                    model.addAttribute(fe.getField() + "_error", true);
+                    LOGGER.trace("FieldError: {}", fe);
+                }
+                return "excursion/new";
+            }
+
+            //create excursion
+            Long id = excursionFacade.create(formBean);
+
+            List<TripDTO> trips = tripFacade.getTripsByDestination(formBean.getDestination());
+            for(TripDTO trip : trips) {
+                tripFacade.refreshExcursions(trip.getId());
+            }
+
+            //report success
+            redAttr.addFlashAttribute("alert_success", "Excursion " + id + " was created");
+            return "redirect:" + uriBuilder.path("/excursion/view/{id}").buildAndExpand(id).encode().toUriString();
+        } else{
+            redAttr.addFlashAttribute("alert_danger", "You don't have permission to create new excursion");
+            return defaultRedirect;
+        }
+    }
+
+    /**
+     * edit method
+     * @param request request
+     * @param id id
+     * @param formBean form bean
+     * @param bindingResult binding result
+     * @param model model
+     * @param redirectAttributes redirect attributes
+     * @param uriBuilder uri builder
+     * @return redirect link
+     */
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String edit(@PathVariable long id, @Valid @ModelAttribute("excursion") ExcursionDTO formBean,
+                        BindingResult bindingResult, HttpServletRequest request,
+                        Model model, RedirectAttributes redirectAttributes,
+                        UriComponentsBuilder uriBuilder) {
+
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        model.addAttribute("authenticatedUser", (UserDTO) request.getSession().getAttribute("authenticatedUser"));
+        if (authUser == null || !authUser.getIsAdmin()) {
+            LOGGER.warn("Failed. Unauthorized");
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    "Unauthorized.");
+            return "redirect:/auth/login";
+        }
+
+        LOGGER.debug("edit(excursion={})", formBean);
+
         //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
@@ -185,20 +266,14 @@ public class ExcursionController {
                 model.addAttribute(fe.getField() + "_error", true);
                 LOGGER.trace("FieldError: {}", fe);
             }
-            return "excursion/new";
+            return "redirect:{id}";
         }
-        //create excursion
-        
-        
-        
-        Long id = excursionFacade.create(formBean);
-
-        List<TripDTO> trips = tripFacade.getTripsByDestination(formBean.getDestination());
-        for(TripDTO trip : trips) {
-            tripFacade.refreshExcursions(trip.getId());
-        }
+        //update excursion
+        formBean.setId(id);
+        excursionFacade.updateExcursion(formBean);
+        model.addAttribute("authenticatedUser", authUser);
         //report success
-        redirectAttributes.addFlashAttribute("alert_success", "Excursion " + id + " was created");
+        redirectAttributes.addFlashAttribute("alert_success", "Excursion " + id + " was edited.");
         return "redirect:" + uriBuilder.path("/excursion/view/{id}").buildAndExpand(id).encode().toUriString();
     }
     

@@ -8,11 +8,11 @@
 <my:pagetemplate>
 <jsp:attribute name="title"><f:message key="trip.administration"/></jsp:attribute>
 <jsp:attribute name="body">
-
+<c:if test="${authenticatedUser.isAdmin}">
     <form method="post" action="${pageContext.request.contextPath}/trip/delete/${trip.id}">
         <button type="submit" class="btn btn-primary"><f:message key="delete"/></button>
     </form>
-
+</c:if>
 
     <form:form method="post" action="${pageContext.request.contextPath}/trip/edit/${trip.id}"
                    modelAttribute="trip" cssClass="form-horizontal">
@@ -61,8 +61,9 @@
                 </div>
             </div>
 
-
+<c:if test="${authenticatedUser.isAdmin}">
             <button class="btn btn-primary" type="submit"><f:message key="trip.edit"/></button>
+</c:if>
         </form:form>
 
     <table class="table">

@@ -117,7 +117,7 @@ public class TripController {
                        RedirectAttributes redirectAttributes) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || !authUser.getIsAdmin()) {
+        if (authUser == null) {
             LOGGER.warn("Failed. Unauthorized");
             redirectAttributes.addFlashAttribute("alert_danger",
                     "Unauthorized.");
