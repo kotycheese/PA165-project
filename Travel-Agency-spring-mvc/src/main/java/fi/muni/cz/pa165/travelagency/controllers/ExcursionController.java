@@ -1,6 +1,7 @@
 package fi.muni.cz.pa165.travelagency.controllers;
 
 import fi.muni.cz.pa165.travelagency.dto.ExcursionDTO;
+import fi.muni.cz.pa165.travelagency.dto.TripDTO;
 import fi.muni.cz.pa165.travelagency.dto.UserDTO;
 import fi.muni.cz.pa165.travelagency.facade.ExcursionFacade;
 import fi.muni.cz.pa165.travelagency.facade.TripFacade;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 /**
  * Controller for Excursion.
@@ -87,7 +90,13 @@ public class ExcursionController {
         }
         
         try {
-            excursionFacade.deleteExcursion(excursionFacade.getByID(id));
+            ExcursionDTO excursionDTO = excursionFacade.getByID(id);
+            excursionFacade.deleteExcursion(excursionDTO);
+
+            List<TripDTO> trips = tripFacade.getTripsByDestination(excursionDTO.getDestination());
+            for(TripDTO trip : trips) {
+                tripFacade.refreshExcursions(trip.getId());
+            }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("alert_danger", "Excursion no. " + id + " could not be deleted");
             return defaultRedirect;
@@ -184,6 +193,10 @@ public class ExcursionController {
         
         Long id = excursionFacade.create(formBean);
 
+        List<TripDTO> trips = tripFacade.getTripsByDestination(formBean.getDestination());
+        for(TripDTO trip : trips) {
+            tripFacade.refreshExcursions(trip.getId());
+        }
         //report success
         redirectAttributes.addFlashAttribute("alert_success", "Excursion " + id + " was created");
         return "redirect:" + uriBuilder.path("/excursion/view/{id}").buildAndExpand(id).encode().toUriString();

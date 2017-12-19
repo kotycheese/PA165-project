@@ -12,7 +12,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <my:pagetemplate>
-<jsp:attribute name="title"><f:message key="trip.administration"/></jsp:attribute>
+<jsp:attribute name="title"><f:message key="excursion.administration"/></jsp:attribute>
 <jsp:attribute name="body">
 
     <form method="post" action="${pageContext.request.contextPath}/excursion/delete/${excursion.id}">
@@ -47,6 +47,7 @@
                 <form:label path="excursionDate" cssClass="col-sm-2 control-label"><f:message key="excursion.excursionDate"/></form:label>
                 <div class="col-sm-10">
                     <form:input path="excursionDate" cssClass="form-control"/>
+                    <form:label path="excursionDate" cssClass="help-block"><f:message key="date.format"/></form:label>
                     <form:errors path="excursionDate" cssClass="help-block"/>
                 </div>
             </div>

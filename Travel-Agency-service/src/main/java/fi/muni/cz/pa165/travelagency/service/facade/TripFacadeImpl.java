@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -87,6 +88,22 @@ public class TripFacadeImpl implements TripFacade {
     }
 
     @Override
+    public List<TripDTO> getTripsByDestination(String destination) {
+        if(destination == null) {
+            return new ArrayList<>();
+        }
+
+        List<TripDTO> all = getAllTrips();
+        List<TripDTO> suitable = new ArrayList<>();
+        for(TripDTO trip : all) {
+            if(destination.equals(trip.getDestination())) {
+                suitable.add(trip);
+            }
+        }
+        return suitable;
+    }
+
+    @Override
     public List<TripDTO> getTripsBetween(Date start, Date end) {
         return beanMappingService.mapTo(tripService.findTripsBetween(start, end), TripDTO.class);
     }
@@ -106,5 +123,20 @@ public class TripFacadeImpl implements TripFacade {
     public List<TripDTO> getNextTrips(Long tripId, int n) {
         return beanMappingService.mapTo(tripService.findNextTrips(tripService.findTripWithId(tripId), n),
                 TripDTO.class);
+    }
+
+    @Override
+    public void refreshExcursions(Long tripId) {
+        List<ExcursionDTO> suitable = getAllSuitableExcursions(tripId);
+        Set<Long> excs = new HashSet<>();
+        for(ExcursionDTO exc : suitable) {
+            excs.add(exc.getId());
+        }
+
+        for(ExcursionDTO exc : getTripWithId(tripId).getExcursions()) {
+            removeExcursion(tripId, exc.getId());
+        }
+
+        addAllExcursions(tripId, excs);
     }
 }

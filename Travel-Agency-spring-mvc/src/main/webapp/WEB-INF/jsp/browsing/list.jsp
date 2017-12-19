@@ -34,6 +34,9 @@
                 <td>
                     <my:a href="/browsing/create/${trip.id}" class="btn btn-primary"><f:message key="buy"/></my:a>
                 </td>
+                <td>
+                    <my:a href="/browsing/view/${trip.id}" class="btn btn-primary"><f:message key="view"/></my:a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

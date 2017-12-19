@@ -68,6 +68,13 @@ public interface TripFacade {
     List<TripDTO> getTripsByName(String tripName);
 
     /**
+     * Returns all trips with given destination.
+     * @param destination destination of the trip
+     * @return all trips with given destination
+     */
+    List<TripDTO> getTripsByDestination(String destination);
+
+    /**
      * Returns all trips between given dates.
      * @param start start date
      * @param end end date
@@ -100,4 +107,10 @@ public interface TripFacade {
      * @return next 10 trips
      */
     List<TripDTO> getNextTrips(Long tripId, int n);
+
+    /**
+     * Refreshes trips excursions to be the all current suitable excursions
+     * @param tripId id of trip to refresh excursions
+     */
+    void refreshExcursions(Long tripId);
 }

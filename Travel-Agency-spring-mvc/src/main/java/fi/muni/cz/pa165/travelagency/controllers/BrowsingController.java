@@ -106,5 +106,31 @@ public class BrowsingController {
                 buildAndExpand(resId).encode().toUriString();
     }
 
+
+    /**
+     * Shows trip with given id
+     * @param redirectAttributes redirect attributes
+     * @param request request
+     * @param id id of trip to show
+     * @param model model
+     * @return jsp page name
+     */
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String view(@PathVariable long id, Model model, HttpServletRequest request,
+                       RedirectAttributes redirectAttributes) {
+
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        if (authUser == null || !authUser.getIsAdmin()) {
+            LOGGER.warn("Failed. Unauthorized");
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    "Unauthorized.");
+            return "redirect:/auth/login";
+        }
+        model.addAttribute("authenticatedUser", authUser);
+        LOGGER.debug("view({})", id);
+        model.addAttribute("trip", tripFacade.getTripWithId(id));
+        model.addAttribute("nextTrips", tripFacade.getNextTrips(id, 5));
+        return "browsing/view";
+    }
 }
 
