@@ -96,14 +96,14 @@ public class BrowsingController {
 
         Long resId = reservationFacade.createReservation(create);
 
-        ReservationDTO reservationDTO = reservationFacade.findReservationById(id);
+        ReservationDTO reservationDTO = reservationFacade.findReservationById(resId);
 
         model.addAttribute("authenticatedUser", authUser);
-        LOGGER.debug("view({})", id);
+        LOGGER.debug("view({})", resId);
         model.addAttribute("trip", reservationDTO.getTrip());
-        model.addAttribute("reservation", reservationFacade.findReservationById(id));
+        model.addAttribute("reservation", reservationFacade.findReservationById(resId));
         return "redirect:" + uriBuilder.path("/reservation/detail/{id}").
-                buildAndExpand(reservationDTO.getId()).encode().toUriString();
+                buildAndExpand(resId).encode().toUriString();
     }
 
 }
