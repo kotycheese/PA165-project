@@ -301,6 +301,11 @@ public class TripController {
         for(ExcursionDTO exc : suitable) {
             excs.add(exc.getId());
         }
+
+        for(ExcursionDTO exc : tripFacade.getTripWithId(id).getExcursions()) {
+            tripFacade.removeExcursion(id, exc.getId());
+        }
+
         tripFacade.addAllExcursions(id, excs);
         model.addAttribute("authenticatedUser", authUser);
         return "redirect:" + uriBuilder.path("/trip/view/{id}").buildAndExpand(id).encode().toUriString();

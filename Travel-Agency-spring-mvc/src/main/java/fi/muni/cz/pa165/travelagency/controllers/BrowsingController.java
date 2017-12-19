@@ -66,15 +66,19 @@ public class BrowsingController {
 
     /**
      * Creates reservation with given trip id
+     * @param id trip id
+     * @param formBean form bean
+     * @param bindingResult result
      * @param redirectAttributes redirect attributes
-     * @param request request
-     * @param id id of trip to show
      * @param model model
+     * @param uriBuilder uribuilder
+     * @param request request
      * @return jsp page name
      */
     @RequestMapping(value = "/create/{id}", method = RequestMethod.GET)
-    public String create(@PathVariable long id, Model model, HttpServletRequest request,
-                       RedirectAttributes redirectAttributes) {
+  public String create(@PathVariable long id, @Valid @ModelAttribute("reservationCreate") ReservationCreateDTO formBean,
+                         BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
+                         UriComponentsBuilder uriBuilder, HttpServletRequest request) {
 
         UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
         if (authUser == null) {
@@ -92,97 +96,15 @@ public class BrowsingController {
 
         Long resId = reservationFacade.createReservation(create);
 
-        return view(resId, model, request, redirectAttributes);
-    }
-
-    /**
-     * Shows reservation with given id
-     * @param redirectAttributes redirect attributes
-     * @param request request
-     * @param id id of trip to show
-     * @param model model
-     * @return jsp page name
-     */
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable long id, Model model, HttpServletRequest request,
-                       RedirectAttributes redirectAttributes) {
-
-        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
         ReservationDTO reservationDTO = reservationFacade.findReservationById(id);
-        if (authUser == null || !authUser.equals(reservationDTO.getUser())) {
-            LOGGER.warn("Failed. Not authorized");
-            redirectAttributes.addFlashAttribute("alert_danger",
-                    "Not authorized.");
-            return "redirect:/auth/login";
-        }
 
         model.addAttribute("authenticatedUser", authUser);
         LOGGER.debug("view({})", id);
         model.addAttribute("trip", reservationDTO.getTrip());
         model.addAttribute("reservation", reservationFacade.findReservationById(id));
-        return "browsing/view";
-    }
-
-    /**
-     * Adds excursion
-     * @param redirectAttributes redirect attributes
-     * @param request request
-     * @param idRes id of reservation
-     * @param idExc id of excursion
-     * @param model model
-     * @return jsp page name
-     */
-    @RequestMapping(value = "/add/{idRes}/{idExc}", method = RequestMethod.GET)
-    public String add(@PathVariable long idRes, @PathVariable long idExc, Model model, HttpServletRequest request,
-                       RedirectAttributes redirectAttributes) {
-
-        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        ReservationDTO reservationDTO = reservationFacade.findReservationById(idRes);
-        if (authUser == null || !authUser.equals(reservationDTO.getUser())) {
-            LOGGER.warn("Failed. Not authorized");
-            redirectAttributes.addFlashAttribute("alert_danger",
-                    "Not authorized.");
-            return "redirect:/auth/login";
-        }
-
-        reservationFacade.addExcursionToReservation(idRes, idExc);
-        model.addAttribute("authenticatedUser", authUser);
-
-        LOGGER.debug("view({})", idRes);
-        model.addAttribute("trip", reservationDTO.getTrip());
-        model.addAttribute("reservation", reservationFacade.findReservationById(idRes));
-        return "browsing/view";
-    }
-
-    /**
-     * save method
-     * @param request request
-     * @param formBean form bean
-     * @param bindingResult binding result
-     * @param model model
-     * @param redirectAttributes redirect attributes
-     * @param uriBuilder uri builder
-     * @return redirect link
-     */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@Valid @ModelAttribute("reservation") ReservationDTO formBean, BindingResult bindingResult,
-                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder,
-                         HttpServletRequest request) {
-
-        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
-        if (authUser == null || !authUser.equals(formBean.getUser())) {
-            LOGGER.warn("Failed. Not authorized");
-            redirectAttributes.addFlashAttribute("alert_danger",
-                    "Not authorized.");
-            return "redirect:/auth/login";
-        }
-
-        LOGGER.debug("save(reservation={})", formBean);
-
-        reservationFacade.updateReservation(formBean);
-
         return "redirect:" + uriBuilder.path("/reservation/detail/{id}").
-                buildAndExpand(formBean.getId()).encode().toUriString();
+                buildAndExpand(reservationDTO.getId()).encode().toUriString();
     }
+
 }
 
