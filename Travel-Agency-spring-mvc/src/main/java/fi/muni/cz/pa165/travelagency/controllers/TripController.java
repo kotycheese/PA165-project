@@ -208,7 +208,7 @@ public class TripController {
                 model.addAttribute(fe.getField() + "_error", true);
                 LOGGER.trace("FieldError: {}", fe);
             }
-            return "trip/new";
+            return newTrip(model, request, redirectAttributes);
         }
         //create trip
         Long id = tripFacade.createTrip(formBean);
@@ -254,7 +254,7 @@ public class TripController {
                 model.addAttribute(fe.getField() + "_error", true);
                 LOGGER.trace("FieldError: {}", fe);
             }
-            return "trip/view/{id}";
+            return view(id, model, request, redirectAttributes);
         }
         //update trip
         formBean.setId(id);

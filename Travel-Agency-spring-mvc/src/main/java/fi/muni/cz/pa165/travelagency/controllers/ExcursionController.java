@@ -210,7 +210,7 @@ public class ExcursionController {
                     model.addAttribute(fe.getField() + "_error", true);
                     LOGGER.trace("FieldError: {}", fe);
                 }
-                return "excursion/new";
+                return newExcursion(model, request, redAttr);
             }
 
             //create excursion
@@ -267,7 +267,7 @@ public class ExcursionController {
                 model.addAttribute(fe.getField() + "_error", true);
                 LOGGER.trace("FieldError: {}", fe);
             }
-            return "redirect:{id}";
+            return view(id, model, redirectAttributes, request);
         }
         //update excursion
         formBean.setId(id);
