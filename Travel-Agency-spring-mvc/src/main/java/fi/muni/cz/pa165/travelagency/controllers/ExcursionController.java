@@ -93,7 +93,8 @@ public class ExcursionController {
             }
 
             try {
-                excursionFacade.deleteExcursion(excursionFacade.getByID(id));
+                ExcursionDTO excursionDTO = excursionFacade.getByID(id);
+                excursionFacade.deleteExcursion(excursionDTO);
 
                 List<TripDTO> trips = tripFacade.getTripsByDestination(excursionDTO.getDestination());
                 for(TripDTO trip : trips) {
