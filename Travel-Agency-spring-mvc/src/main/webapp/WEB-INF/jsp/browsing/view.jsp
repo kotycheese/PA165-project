@@ -71,8 +71,8 @@
             </tbody>
         </table>
 
-    <form method="post" action="${pageContext.request.contextPath}/trip/resetExcursions/${trip.id}">
-        <button type="submit" class="btn btn-primary"><f:message key="trip.reset.excursions"/></button>
+    <form method="post" action="${pageContext.request.contextPath}/browsing/save">
+        <button type="submit" class="btn btn-primary"><f:message key="save"/></button>
     </form>
 </jsp:attribute>
 </my:pagetemplate>

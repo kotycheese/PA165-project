@@ -11,12 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Date;
 
 /**
@@ -146,6 +150,35 @@ public class BrowsingController {
         return "reservation/detail";
     }
 
+    /**
+     * save method
+     * @param request request
+     * @param formBean form bean
+     * @param bindingResult binding result
+     * @param model model
+     * @param redirectAttributes redirect attributes
+     * @param uriBuilder uri builder
+     * @return redirect link
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(@Valid @ModelAttribute("reservation") ReservationDTO formBean, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder,
+                         HttpServletRequest request) {
 
+        UserDTO authUser = (UserDTO) request.getSession().getAttribute("authenticatedUser");
+        if (authUser == null || !authUser.equals(formBean.getUser())) {
+            LOGGER.warn("Failed. Not authorized");
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    "Not authorized.");
+            return "redirect:/auth/login";
+        }
+
+        LOGGER.debug("save(reservation={})", formBean);
+
+        reservationFacade.updateReservation(formBean);
+
+        return "redirect:" + uriBuilder.path("/reservation/detail/{id}").
+                buildAndExpand(formBean.getId()).encode().toUriString();
+    }
 }
 
