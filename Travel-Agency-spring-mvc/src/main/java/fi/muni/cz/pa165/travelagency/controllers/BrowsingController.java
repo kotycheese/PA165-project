@@ -99,11 +99,11 @@ public class BrowsingController {
         ReservationDTO reservationDTO = reservationFacade.findReservationById(resId);
 
         model.addAttribute("authenticatedUser", authUser);
-        LOGGER.debug("view({})", id);
+        LOGGER.debug("view({})", resId);
         model.addAttribute("trip", reservationDTO.getTrip());
-        model.addAttribute("reservation", reservationFacade.findReservationById(id));
+        model.addAttribute("reservation", reservationDTO);
         return "redirect:" + uriBuilder.path("/reservation/detail/{resId}").
-                buildAndExpand(reservationDTO.getId()).encode().toUriString();
+                buildAndExpand(resId).encode().toUriString();
     }
 
 }
