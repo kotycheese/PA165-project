@@ -55,7 +55,7 @@ public class UserController {
             LOGGER.warn("GET user/view");
             redirectAttributes.addFlashAttribute("alert_danger", "Cannot display not existing user.");
         }
-
+        model.addAttribute("authenticatedUser", (UserDTO) req.getSession().getAttribute("authenticatedUser"));
         return "user/view";
     }
 
@@ -74,7 +74,7 @@ public class UserController {
 
             return AUTH_PAGE_URL;
         }
-
+        model.addAttribute("authenticatedUser", (UserDTO) req.getSession().getAttribute("authenticatedUser"));
         LOGGER.info("GET request: user/list");
         model.addAttribute("users", userFacade.findAll());
         return "user/list";
@@ -107,7 +107,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("alert_danger", "Cannot delete user with reservations.");
             return "redirect:/user/list";
         }
-
+        
         LOGGER.info("POST request: user/remove/", id);
         userFacade.removeUser(userDTO);
         return "redirect:/user/list";
@@ -135,7 +135,7 @@ public class UserController {
             LOGGER.warn("GET user/view");
             redirectAttributes.addFlashAttribute("alert_danger", "Cannot display not existing user.");
         }
-
+        model.addAttribute("authenticatedUser", (UserDTO) req.getSession().getAttribute("authenticatedUser"));
         LOGGER.info("GET request: user/edit/", id);
         model.addAttribute("user", userDTO);
         model.addAttribute("userEdit", new UserDTO());
@@ -198,7 +198,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("alert_danger", "Error occurred during updating");
             return USER_EDIT_PAGE_URL + id;
         }
-
+        
         LOGGER.info("POST request: user/edit/{}", id);
         return "redirect:/user/view/" + id;
     }
