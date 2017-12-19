@@ -272,6 +272,12 @@ public class ExcursionController {
         //update excursion
         formBean.setId(id);
         excursionFacade.updateExcursion(formBean);
+
+        List<TripDTO> trips = tripFacade.getTripsByDestination(formBean.getDestination());
+        for(TripDTO trip : trips) {
+            tripFacade.refreshExcursions(trip.getId());
+        }
+
         model.addAttribute("authenticatedUser", authUser);
         //report success
         redirectAttributes.addFlashAttribute("alert_success", "Excursion " + id + " was edited.");
